@@ -2,23 +2,26 @@ package builder;
 
 import business.TShirt;
 
-public class TShirtBuilder implements ClothingBuilder{
+public class TShirtBuilder implements ClothingBuilder {
     private String size;
     private String material;
     private String color;
     private String sleeves;
     private String neck;
 
+    @Override
     public TShirtBuilder setSize(String size) {
         this.size = size;
         return this;
     }
 
+    @Override
     public TShirtBuilder setMaterial(String material) {
         this.material = material;
         return this;
     }
 
+    @Override
     public TShirtBuilder setColor(String color) {
         this.color = color;
         return this;
@@ -34,6 +37,7 @@ public class TShirtBuilder implements ClothingBuilder{
         return this;
     }
 
+    @Override
     public TShirt build() {
         TShirt tshirt = new TShirt("TShirt");
         tshirt.setSize(size);

@@ -4,18 +4,10 @@ import business.Clothing;
 import business.Customer;
 import observer.VD;
 import service.OrderService;
-
 import builder.PantsBuilder;
 import builder.TShirtBuilder;
 import builder.SkirtBuilder;
-
-import command.Command;
-import command.FitCommand;
-import command.LengthCommand;
-import command.NeckCommand;
-import command.SleevesCommand;
-import command.PatternCommand;
-import command.WaistlineCommand;
+import command.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,9 +19,9 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        OrderService orderService = OrderService.getInstance();
 
         VD ceo = new VD("Boss Lady");
+        OrderService orderService = OrderService.getInstance();
         orderService.addObserver(ceo);
 
         boolean continueAddingOrders = true;
@@ -62,20 +54,61 @@ public class Main {
 
             Customer customer = getCustomerInfo(scanner);
 
+            Pipeline pipeline = new Pipeline();
+
+            System.out.println("Enter size:");
+            String size = scanner.nextLine();
+            pipeline.addCommand(new SetSizeCommand(size));
+
+            System.out.println("Enter material:");
+            String material = scanner.nextLine();
+            pipeline.addCommand(new SetMaterialCommand(material));
+
+            System.out.println("Enter color:");
+            String color = scanner.nextLine();
+            pipeline.addCommand(new SetColorCommand(color));
+
+            Clothing clothing;
             switch (clothingType) {
                 case 1:
-                    createPantsOrder(scanner, orderService, customer);
+                    System.out.println("Enter fit:");
+                    String fit = scanner.nextLine();
+                    pipeline.addCommand(new SetFitCommand(fit));
+
+                    System.out.println("Enter length:");
+                    String length = scanner.nextLine();
+                    pipeline.addCommand(new SetLengthCommand(length));
+
+                    clothing = new PantsBuilder().setSize(size).setMaterial(material).setColor(color).setFit(fit).setLength(length).build();
                     break;
                 case 2:
-                    createTShirtOrder(scanner, orderService, customer);
+                    System.out.println("Enter sleeves:");
+                    String sleeves = scanner.nextLine();
+                    pipeline.addCommand(new SetSleevesCommand(sleeves));
+
+                    System.out.println("Enter neck:");
+                    String neck = scanner.nextLine();
+                    pipeline.addCommand(new SetNeckCommand(neck));
+
+                    clothing = new TShirtBuilder().setSize(size).setMaterial(material).setColor(color).setSleeves(sleeves).setNeck(neck).build();
                     break;
                 case 3:
-                    createSkirtOrder(scanner, orderService, customer);
+                    System.out.println("Enter waistline:");
+                    String waistline = scanner.nextLine();
+                    pipeline.addCommand(new SetWaistlineCommand(waistline));
+
+                    System.out.println("Enter pattern:");
+                    String pattern = scanner.nextLine();
+                    pipeline.addCommand(new SetPatternCommand(pattern));
+
+                    clothing = new SkirtBuilder().setSize(size).setMaterial(material).setColor(color).setWaistline(waistline).setPattern(pattern).build();
                     break;
                 default:
-                    System.out.println("Invalid selection.");
                     continue;
             }
+
+            pipeline.execute(clothing);
+            orderService.addOrder(clothing, customer);
 
             System.out.println("Do you want to add another order? (yes/no)");
             String addAnother = scanner.nextLine().toLowerCase();
@@ -85,7 +118,6 @@ public class Main {
             }
         }
 
-        // Print the receipt
         orderService.printReceipt();
 
         scanner.close();
@@ -124,202 +156,5 @@ public class Main {
         Customer customer = new Customer(customerIdCounter++, name, address, email);
         System.out.println("New customer created with ID: " + customer.getId());
         return customer;
-    }
-
-    private static void createPantsOrder(Scanner scanner, OrderService orderService, Customer customer) {
-        System.out.println("Enter size:");
-        String size = scanner.nextLine();
-
-        System.out.println("Enter material:");
-        String material = scanner.nextLine();
-
-        System.out.println("Enter color:");
-        String color = scanner.nextLine();
-
-        System.out.println("Enter fit:");
-        String fit = scanner.nextLine();
-
-        System.out.println("Enter length:");
-        String length = scanner.nextLine();
-
-        Clothing pants = new PantsBuilder()
-                .setSize(size)
-                .setMaterial(material)
-                .setColor(color)
-                .setFit(fit)
-                .setLength(length)
-                .build();
-
-        //COMMANDS
-        applyPantsCommands(scanner, pants);
-
-        orderService.addOrder(pants, customer);
-    }
-
-    private static void applyPantsCommands(Scanner scanner, Clothing pants) {
-        boolean continueApplyingCommands = true;
-        Command command;
-
-        while (continueApplyingCommands) {
-            System.out.println("Select command to apply:");
-            System.out.println("1. Adjust Fit");
-            System.out.println("2. Adjust Length");
-            System.out.println("3. Finish");
-            System.out.println("Enter the number:");
-
-            String input = scanner.nextLine();
-
-            switch (input) {
-                case "1":
-                    System.out.println("Enter new fit:");
-                    String newFit = scanner.nextLine();
-                    command = new FitCommand(newFit);
-                    command.execute(pants);
-                    break;
-                case "2":
-                    System.out.println("Enter new length:");
-                    String newLength = scanner.nextLine();
-                    command = new LengthCommand(newLength);
-                    command.execute(pants);
-                    break;
-                case "3":
-                    continueApplyingCommands = false;
-                    break;
-                default:
-                    System.out.println("Invalid command.");
-                    break;
-            }
-        }
-    }
-
-    private static void createTShirtOrder(Scanner scanner, OrderService orderService, Customer customer) {
-        System.out.println("Enter size:");
-        String size = scanner.nextLine();
-
-        System.out.println("Enter material:");
-        String material = scanner.nextLine();
-
-        System.out.println("Enter color:");
-        String color = scanner.nextLine();
-
-        System.out.println("Enter sleeves:");
-        String sleeves = scanner.nextLine();
-
-        System.out.println("Enter neck:");
-        String neck = scanner.nextLine();
-
-        Clothing tshirt = new TShirtBuilder()
-                .setSize(size)
-                .setMaterial(material)
-                .setColor(color)
-                .setSleeves(sleeves)
-                .setNeck(neck)
-                .build();
-
-        applyTshirtCommands(scanner, tshirt);
-
-        orderService.addOrder(tshirt, customer);
-    }
-
-    private static void applyTshirtCommands(Scanner scanner, Clothing tshirt) {
-        boolean continueApplyingCommands = true;
-        Command command;
-
-        while (continueApplyingCommands) {
-            System.out.println("Select command to apply:");
-            System.out.println("1. Adjust Sleeves");
-            System.out.println("2. Adjust Neck");
-            System.out.println("3. Finish");
-            System.out.println("Enter the number:");
-
-            String input = scanner.nextLine();
-
-            switch (input) {
-                case "1":
-                    System.out.println("Enter new sleeves:");
-                    String newSleeves = scanner.nextLine();
-                    command = new SleevesCommand(newSleeves);
-                    command.execute(tshirt);
-                    break;
-                case "2":
-                    System.out.println("Enter new neck:");
-                    String newNeck = scanner.nextLine();
-                    command = new NeckCommand(newNeck);
-                    command.execute(tshirt);
-                    break;
-                case "3":
-                    continueApplyingCommands = false;
-                    break;
-                default:
-                    System.out.println("Invalid command.");
-                    break;
-
-            }
-        }
-    }
-
-    private static void createSkirtOrder(Scanner scanner, OrderService orderService, Customer customer) {
-        System.out.println("Enter size:");
-        String size = scanner.nextLine();
-
-        System.out.println("Enter material:");
-        String material = scanner.nextLine();
-
-        System.out.println("Enter color:");
-        String color = scanner.nextLine();
-
-        System.out.println("Enter pattern:");
-        String pattern = scanner.nextLine();
-
-        System.out.println("Enter waistline:");
-        String waistline = scanner.nextLine();
-
-        Clothing skirt = new SkirtBuilder()
-                .setSize(size)
-                .setMaterial(material)
-                .setColor(color)
-                .setPattern(pattern)
-                .setWaistline(waistline)
-                .build();
-
-        applySkirtCommands(scanner, skirt);
-
-        orderService.addOrder(skirt, customer);
-    }
-
-    private static void applySkirtCommands(Scanner scanner, Clothing skirt) {
-        boolean continueApplyingCommands = true;
-        Command command;
-
-        while (continueApplyingCommands) {
-            System.out.println("Select command to apply:");
-            System.out.println("1. Adjust Pattern");
-            System.out.println("2. Adjust Waistline");
-            System.out.println("3. Finish");
-            System.out.println("Enter the number:");
-
-            String input = scanner.nextLine();
-
-            switch (input) {
-                case "1":
-                    System.out.println("Enter new Pattern:");
-                    String newPattern = scanner.nextLine();
-                    command = new PatternCommand(newPattern);
-                    command.execute(skirt);
-                    break;
-                case "2":
-                    System.out.println("Enter new Waistline:");
-                    String newWaistline = scanner.nextLine();
-                    command = new WaistlineCommand(newWaistline);
-                    command.execute(skirt);
-                    break;
-                case "3":
-                    continueApplyingCommands = false;
-                    break;
-                default:
-                    System.out.println("Invalid command.");
-                    break;
-            }
-        }
     }
 }

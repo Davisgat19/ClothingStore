@@ -35,6 +35,11 @@ public class TShirt extends Clothing {
         this.color = color;
     }
 
+    @Override
+    public void displayDetails() {
+
+    }
+
     public String getSleeves() {
         return sleeves;
     }

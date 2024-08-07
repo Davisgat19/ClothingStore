@@ -9,16 +9,19 @@ public class PantsBuilder implements ClothingBuilder {
     private String fit;
     private String length;
 
+    @Override
     public PantsBuilder setSize(String size) {
         this.size = size;
         return this;
     }
 
+    @Override
     public PantsBuilder setMaterial(String material) {
         this.material = material;
         return this;
     }
 
+    @Override
     public PantsBuilder setColor(String color) {
         this.color = color;
         return this;
@@ -34,6 +37,7 @@ public class PantsBuilder implements ClothingBuilder {
         return this;
     }
 
+    @Override
     public Pants build() {
         Pants pants = new Pants("Pants");
         pants.setSize(size);

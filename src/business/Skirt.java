@@ -35,6 +35,11 @@ public class Skirt extends Clothing {
         this.color = color;
     }
 
+    @Override
+    public void displayDetails() {
+
+    }
+
     public String getWaistline() {
         return waistline;
     }

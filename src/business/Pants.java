@@ -36,6 +36,11 @@ public class Pants extends Clothing {
         this.color = color;
     }
 
+    @Override
+    public void displayDetails() {
+
+    }
+
     public String getFit() {
         return fit;
     }

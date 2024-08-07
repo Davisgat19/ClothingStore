@@ -2,24 +2,26 @@ package builder;
 
 import business.Skirt;
 
-public class SkirtBuilder implements ClothingBuilder{
+public class SkirtBuilder implements ClothingBuilder {
     private String size;
     private String material;
     private String color;
     private String waistline;
     private String pattern;
 
+    @Override
     public SkirtBuilder setSize(String size) {
         this.size = size;
         return this;
     }
 
-
+    @Override
     public SkirtBuilder setMaterial(String material) {
         this.material = material;
         return this;
     }
 
+    @Override
     public SkirtBuilder setColor(String color) {
         this.color = color;
         return this;
@@ -35,6 +37,7 @@ public class SkirtBuilder implements ClothingBuilder{
         return this;
     }
 
+    @Override
     public Skirt build() {
         Skirt skirt = new Skirt("Skirt");
         skirt.setSize(size);
