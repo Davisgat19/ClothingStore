@@ -21,7 +21,6 @@ public abstract class Clothing {
         this.id = id;
     }
 
-    // Getter och Setter för customer
     public Customer getCustomer() {
         return customer;
     }
@@ -30,7 +29,6 @@ public abstract class Clothing {
         this.customer = customer;
     }
 
-    // Övriga getters och setters
     public String getName() {
         return name;
     }
@@ -63,6 +61,5 @@ public abstract class Clothing {
         this.color = color;
     }
 
-    // Metod för att visa detaljer för specifikt klädesplagg
     public abstract void displayDetails();
 }
