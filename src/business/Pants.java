@@ -1,44 +1,19 @@
 package business;
 
 public class Pants extends Clothing {
-    private String size;
-    private String material;
-    private String color;
     private String fit;
     private String length;
 
-    public Pants(String name) {
-        super(name);
-    }
-
-    //SETTERS N Getters For all articles
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public String getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(String material) {
-        this.material = material;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
+    public Pants(String id, String name, String size, double price, String material, String color, String fit, String length) {
+        super(id, name, size, price, material, color);
+        this.fit = fit;
+        this.length = length;
     }
 
     @Override
-    public void displayDetails() {
-
+    public void printDetails() {
+        super.printDetails();
+        System.out.println("Fit: " + fit + ", Length: " + length);
     }
 
     public String getFit() {

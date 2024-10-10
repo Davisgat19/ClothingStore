@@ -1,45 +1,22 @@
 package business;
 
 public class TShirt extends Clothing {
-    private String size;
-    private String material;
-    private String color;
     private String sleeves;
     private String neck;
 
-    public TShirt(String name) {
-        super(name);
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public String getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(String material) {
-        this.material = material;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
+    public TShirt(String id, String name, String size, double price, String material, String color, String sleeves, String neck) {
+        super(id, name, size, price, material, color);
+        this.sleeves = sleeves;
+        this.neck = neck;
     }
 
     @Override
-    public void displayDetails() {
-
+    public void printDetails() {
+        super.printDetails();
+        System.out.println("Sleeves: " + sleeves + ", Neck: " + neck);
     }
 
+    // Getters och Setters
     public String getSleeves() {
         return sleeves;
     }

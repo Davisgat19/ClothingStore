@@ -1,40 +1,37 @@
 package main;
 
-import business.Pants;
-import business.Skirt;
-import business.TShirt;
-import business.Customer;
 import builder.PantsBuilder;
 import builder.SkirtBuilder;
 import builder.TShirtBuilder;
-import command.ClothingCommand;
+import business.*;
+import command.ClothingCommands;
 import command.CommandPipeline;
-import command.GenericClothingCommand;
-import observer.VD;
+import observer.CEO;
 import service.OrderService;
 
+import java.util.Date;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        OrderService orderService = OrderService.getInstance();
+
+        CEO ceo = new CEO("Boss Lady");
+        orderService.addObserver(ceo);
+
+        CommandPipeline pipeline = new CommandPipeline();
+        ClothingCommands commands = new ClothingCommands();
+
         System.out.print("Enter customer name: ");
         String customerName = scanner.nextLine();
-
         System.out.print("Enter customer address: ");
         String customerAddress = scanner.nextLine();
-
         System.out.print("Enter customer email: ");
         String customerEmail = scanner.nextLine();
 
         Customer customer = new Customer(customerName, customerAddress, customerEmail);
-
-        VD ceo = new VD("Boss Lady");
-
-        OrderService orderService = OrderService.getInstance();
-
-        orderService.addObserver(ceo);
 
         boolean keepOrdering = true;
 
@@ -43,129 +40,117 @@ public class Main {
             System.out.println("1. Pants");
             System.out.println("2. Skirt");
             System.out.println("3. T-Shirt");
-            System.out.print("Enter your choice (1, 2, or 3): ");
+            System.out.println("4. Exit and print receipt");
+            System.out.print("Enter your choice (1, 2, 3, or 4): ");
             int choice = scanner.nextInt();
             scanner.nextLine();
 
+            Clothing clothing = null;
+
             if (choice == 1) {
-                System.out.print("Enter pants size: ");
-                String pantsSize = scanner.nextLine();
+                String size = chooseOption(scanner, "Pick size:", "S", "M");
+                String material = chooseOption(scanner, "Pick material:", "Denim", "Linen");
+                String color = chooseOption(scanner, "Pick color:", "Blue", "Black");
+                String fit = chooseOption(scanner, "Pick fit:", "Slim", "Loose", "Regular");
+                String length = chooseOption(scanner, "Pick length:", "32", "34");
 
-                System.out.print("Enter pants material: ");
-                String pantsMaterial = scanner.nextLine();
-
-                System.out.print("Enter pants color: ");
-                String pantsColor = scanner.nextLine();
-
-                System.out.print("Enter pants fit: ");
-                String pantsFit = scanner.nextLine();
-
-                System.out.print("Enter pants length: ");
-                String pantsLength = scanner.nextLine();
-
-                PantsBuilder pantsBuilder = new PantsBuilder();
-                Pants myPants = pantsBuilder.setSize(pantsSize)
-                        .setMaterial(pantsMaterial)
-                        .setColor(pantsColor)
-                        .setFit(pantsFit)
-                        .setLength(pantsLength)
+                Pants pants = new PantsBuilder()
+                        .setName("Pants")
+                        .setSize(size)
+                        .setMaterial(material)
+                        .setColor(color)
+                        .setFit(fit)
+                        .setLength(length)
+                        .setPrice(49.99)
                         .build();
+                pants.setCustomer(customer);
+                clothing = pants;
 
-                CommandPipeline pantsPipeline = new CommandPipeline();
+                pipeline.addCommand(commands::adjustFit);
+                pipeline.addCommand(commands::adjustLength);
 
-                ClothingCommand sewFitCommand = new GenericClothingCommand("sew", "fit", pantsFit);
-                ClothingCommand cutLengthCommand = new GenericClothingCommand("cut", "length", pantsLength);
-
-                pantsPipeline.addCommand(sewFitCommand);
-                pantsPipeline.addCommand(cutLengthCommand);
-
-                System.out.println("Processing Pants:");
-                pantsPipeline.execute(myPants);
-
-                orderService.addOrder(myPants, customer);
-
+                orderService.addOrder(pants, customer);
+                System.out.println("Pants added to order with ID: " + pants.getId());
             } else if (choice == 2) {
-                System.out.print("Enter skirt size: ");
-                String skirtSize = scanner.nextLine();
+                String size = chooseOption(scanner, "Pick size:", "S", "M");
+                String material = chooseOption(scanner, "Pick material:", "Cotton", "Silk");
+                String color = chooseOption(scanner, "Pick color:", "Red", "Black");
+                String waistline = chooseOption(scanner, "Pick waistline:", "High", "Medium", "Low");
+                String pattern = chooseOption(scanner, "Pick pattern:", "Floral", "Solid");
 
-                System.out.print("Enter skirt material: ");
-                String skirtMaterial = scanner.nextLine();
-
-                System.out.print("Enter skirt color: ");
-                String skirtColor = scanner.nextLine();
-
-                System.out.print("Enter skirt waistline: ");
-                String skirtWaistline = scanner.nextLine();
-
-                System.out.print("Enter skirt pattern: ");
-                String skirtPattern = scanner.nextLine();
-
-                SkirtBuilder skirtBuilder = new SkirtBuilder();
-                Skirt mySkirt = skirtBuilder.setSize(skirtSize)
-                        .setMaterial(skirtMaterial)
-                        .setColor(skirtColor)
-                        .setWaistline(skirtWaistline)
-                        .setPattern(skirtPattern)
+                Skirt skirt = new SkirtBuilder()
+                        .setName("Skirt")
+                        .setSize(size)
+                        .setMaterial(material)
+                        .setColor(color)
+                        .setWaistline(waistline)
+                        .setPattern(pattern)
+                        .setPrice(39.99)
                         .build();
+                skirt.setCustomer(customer);
+                clothing = skirt;
 
-                CommandPipeline skirtPipeline = new CommandPipeline();
+                pipeline.addCommand(commands::addPattern);
+                pipeline.addCommand(commands::addWaistLine);
 
-                ClothingCommand sewWaistlineCommand = new GenericClothingCommand("sew", "waistline", skirtWaistline);
-                ClothingCommand cutPatternCommand = new GenericClothingCommand("cut", "pattern", skirtPattern);
-
-                skirtPipeline.addCommand(sewWaistlineCommand);
-                skirtPipeline.addCommand(cutPatternCommand);
-
-                System.out.println("Processing Skirt:");
-                skirtPipeline.execute(mySkirt);
-
-                orderService.addOrder(mySkirt, customer);
-
+                orderService.addOrder(skirt, customer);
+                System.out.println("Skirt added to order with ID: " + skirt.getId());
             } else if (choice == 3) {
-                System.out.print("Enter T-Shirt size: ");
-                String tShirtSize = scanner.nextLine();
+                String size = chooseOption(scanner, "Pick size:", "S", "M");
+                String material = chooseOption(scanner, "Pick material:", "Cotton", "Polyester");
+                String color = chooseOption(scanner, "Pick color:", "White", "Black");
+                String sleeves = chooseOption(scanner, "Pick sleeves:", "Short", "Long", "Sleeveless");
+                String neck = chooseOption(scanner, "Pick neck type:", "Round", "V-neck", "Polo");
 
-                System.out.print("Enter T-Shirt material: ");
-                String tShirtMaterial = scanner.nextLine();
-
-                System.out.print("Enter T-Shirt color: ");
-                String tShirtColor = scanner.nextLine();
-
-                System.out.print("Enter T-Shirt sleeves: ");
-                String tShirtSleeves = scanner.nextLine();
-
-                System.out.print("Enter T-Shirt neck: ");
-                String tShirtNeck = scanner.nextLine();
-
-                TShirtBuilder tShirtBuilder = new TShirtBuilder();
-                TShirt myTShirt = tShirtBuilder.setSize(tShirtSize)
-                        .setMaterial(tShirtMaterial)
-                        .setColor(tShirtColor)
-                        .setSleeves(tShirtSleeves)
-                        .setNeck(tShirtNeck)
+                TShirt tShirt = new TShirtBuilder()
+                        .setName("T-Shirt")
+                        .setSize(size)
+                        .setMaterial(material)
+                        .setColor(color)
+                        .setSleeves(sleeves)
+                        .setNeck(neck)
+                        .setPrice(29.99)
                         .build();
+                tShirt.setCustomer(customer);
+                clothing = tShirt;
 
-                CommandPipeline tShirtPipeline = new CommandPipeline();
+                pipeline.addCommand(commands::sewNeck);
+                pipeline.addCommand(commands::adjustSleeves);
 
-                ClothingCommand sewNeckCommand = new GenericClothingCommand("sew", "neck", tShirtNeck);
-                ClothingCommand cutSleevesCommand = new GenericClothingCommand("cut", "sleeves", tShirtSleeves);
-
-                tShirtPipeline.addCommand(sewNeckCommand);
-                tShirtPipeline.addCommand(cutSleevesCommand);
-
-                System.out.println("Processing T-Shirt:");
-                tShirtPipeline.execute(myTShirt);
-
-                orderService.addOrder(myTShirt, customer);
+                orderService.addOrder(tShirt, customer);
+                System.out.println("T-Shirt added to order with ID: " + tShirt.getId());
+            } else if (choice == 4) {
+                keepOrdering = false;
+            } else {
+                System.out.println("Invalid choice. Please try again.");
             }
 
-            System.out.print("\nDo you want to make another order? (yes/no): ");
-            String response = scanner.nextLine();
-            if (response.equalsIgnoreCase("no")) {
-                keepOrdering = false;
+            if (clothing != null) {
+                pipeline.execute(clothing);
             }
         }
 
-        orderService.printReceipt();
+        Date currentDate = new Date();
+        orderService.printReceipt(orderService.getOrders(), currentDate, ceo);
+
+        scanner.close();
+    }
+
+    private static String chooseOption(Scanner scanner, String prompt, String... options) {
+        System.out.println(prompt);
+        for (int i = 0; i < options.length; i++) {
+            System.out.println((i + 1) + ". " + options[i]);
+        }
+
+        System.out.print("Enter choice (1-" + options.length + "): ");
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        if (choice >= 1 && choice <= options.length) {
+            return options[choice - 1];
+        } else {
+            System.out.println("Invalid choice. Default option selected.");
+            return options[0];
+        }
     }
 }

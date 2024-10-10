@@ -1,48 +1,40 @@
 package business;
 
 public abstract class Clothing {
-    private int id; // Unik identifierare för varje klädesplagg
+    private String id;
     private String name;
     private String size;
+    private double price;
     private String material;
     private String color;
-    private Customer customer; // Referens till kund
+    private Customer customer;
 
-    public Clothing(String name) {
-        this.name = name;
-    }
-
-    // Getter och Setter för id
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
+    public Clothing(String id, String name, String size, double price, String material, String color) {
         this.id = id;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
         this.size = size;
+        this.price = price;
+        this.material = material;
+        this.color = color;
+    }
+
+    public void printDetails() {
+        System.out.println("Clothing ID: " + id +
+                ", Name: " + name +
+                ", Size: " + size +
+                ", Price: " + price +
+                ", Material: " + material +
+                ", Color: " + color +
+                ", Customer: " + (customer != null ? customer.getName() : "No customer assigned"));
+    }
+
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getMaterial() {
@@ -53,13 +45,43 @@ public abstract class Clothing {
         this.material = material;
     }
 
-    public String getColor() {
-        return color;
+    public double getPrice() {
+        return price;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
-    public abstract void displayDetails();
-}
+    public String getSize() {
+        return size;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+        }
+    }
