@@ -5,15 +5,13 @@ public class Customer {
     private String name;
     private String address;
     private String email;
-    private Customer customer;
-
 
     public Customer(String name, String address, String email) {
-        this.id = id;
         this.name = name;
         this.address = address;
         this.email = email;
     }
+
 
     public int getId() {
         return id;

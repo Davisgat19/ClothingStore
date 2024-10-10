@@ -7,7 +7,7 @@ import java.util.List;
 
 
 public class CommandPipeline {
-    private List<Command> commands = new ArrayList<>();
+    private final List<Command> commands = new ArrayList<>();
 
     public void addCommand(Command command) {
         commands.add(command);

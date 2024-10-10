@@ -61,6 +61,8 @@ public class OrderService {
         System.out.println("Receipt Date: " + dateFormat.format(date));
         System.out.println("-----------------------------------------------");
 
+        double totalPrice = 0;
+
         for (Clothing order : orders) {
             Customer customer = order.getCustomer();
             if (customer != null) {
