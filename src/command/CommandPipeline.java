@@ -1,13 +1,11 @@
 package command;
 
 import business.Clothing;
-
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class CommandPipeline {
-    private final List<Command> commands = new ArrayList<>();
+    private List<Command> commands = new ArrayList<>();
 
     public void addCommand(Command command) {
         commands.add(command);

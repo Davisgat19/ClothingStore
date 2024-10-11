@@ -4,8 +4,7 @@ import builder.PantsBuilder;
 import builder.SkirtBuilder;
 import builder.TShirtBuilder;
 import business.*;
-import command.ClothingCommands;
-import command.CommandPipeline;
+import command.*;
 import observer.CEO;
 import service.OrderService;
 
@@ -22,7 +21,7 @@ public class Main {
         orderService.addObserver(ceo);
 
         CommandPipeline pipeline = new CommandPipeline();
-        ClothingCommands commands = new ClothingCommands();
+
 
         System.out.print("Enter customer name: ");
         String customerName = scanner.nextLine();
@@ -64,8 +63,8 @@ public class Main {
                 pants.setCustomer(customer);
                 clothing = pants;
 
-                pipeline.addCommand(commands::adjustFit);
-                pipeline.addCommand(commands::adjustLength);
+                pipeline.addCommand(new AdjustFitCommand(fit));
+                pipeline.addCommand(new AdjustLengthCommand(length));
 
                 orderService.addOrder(pants, customer);
                 System.out.println("Pants added to order with ID: " + pants.getId());
@@ -86,8 +85,8 @@ public class Main {
                 skirt.setCustomer(customer);
                 clothing = skirt;
 
-                pipeline.addCommand(commands::addPattern);
-                pipeline.addCommand(commands::addWaistLine);
+                pipeline.addCommand(new AddWaistLineCommand(waistline));
+                pipeline.addCommand(new AddPatternCommand(pattern));
 
                 orderService.addOrder(skirt, customer);
                 System.out.println("Skirt added to order with ID: " + skirt.getId());
@@ -108,8 +107,8 @@ public class Main {
                 tShirt.setCustomer(customer);
                 clothing = tShirt;
 
-                pipeline.addCommand(commands::sewNeck);
-                pipeline.addCommand(commands::adjustSleeves);
+                pipeline.addCommand(new AdjustSleeveCommand(sleeves));
+                pipeline.addCommand(new SewNeckCommand(neck));
 
                 orderService.addOrder(tShirt, customer);
                 System.out.println("T-Shirt added to order with ID: " + tShirt.getId());
