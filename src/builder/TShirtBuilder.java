@@ -9,8 +9,6 @@ public class TShirtBuilder implements ClothingBuilder {
     private double price;
     private String material;
     private String color;
-    private String sleeves;
-    private String neck;
 
     public TShirtBuilder setSize(String size) {
         this.size = size;
@@ -32,15 +30,6 @@ public class TShirtBuilder implements ClothingBuilder {
         return this;
     }
 
-    public TShirtBuilder setSleeves(String sleeves) {
-        this.sleeves = sleeves;
-        return this;
-    }
-
-    public TShirtBuilder setNeck(String neck) {
-        this.neck = neck;
-        return this;
-    }
 
     public TShirtBuilder setId(String id) {
         this.id = id;
@@ -54,6 +43,6 @@ public class TShirtBuilder implements ClothingBuilder {
 
     @Override
     public TShirt build() {
-        return new TShirt(id, name, size, price, material, color, sleeves, neck);
+        return new TShirt(id, name, size, price, material, color);
     }
 }

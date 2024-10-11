@@ -9,8 +9,7 @@ public class PantsBuilder implements ClothingBuilder {
     private double price;
     private String material;
     private String color;
-    private String fit;
-    private String length;
+
 
     public PantsBuilder setSize(String size) {
         this.size = size;
@@ -32,16 +31,6 @@ public class PantsBuilder implements ClothingBuilder {
         return this;
     }
 
-    public PantsBuilder setFit(String fit) {
-        this.fit = fit;
-        return this;
-    }
-
-    public PantsBuilder setLength(String length) {
-        this.length = length;
-        return this;
-    }
-
     public PantsBuilder setId(String id) {
         this.id = id;
         return this;
@@ -54,6 +43,6 @@ public class PantsBuilder implements ClothingBuilder {
 
     @Override
     public Pants build() {
-        return new Pants(id, name, size, price, material, color, fit, length);
+        return new Pants(id, name, size, price, material, color);
     }
 }

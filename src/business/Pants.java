@@ -1,12 +1,18 @@
 package business;
 
 public class Pants extends Clothing {
-    private final String fit;
-    private final String length;
+    private String fit;
+    private String length;
 
-    public Pants(String id, String name, String size, double price, String material, String color, String fit, String length) {
+    public Pants(String id, String name, String size, double price, String material, String color) {
         super(id, name, size, price, material, color);
+    }
+
+    public void setFit(String fit) {
         this.fit = fit;
+    }
+
+    public void setLength(String length) {
         this.length = length;
     }
 

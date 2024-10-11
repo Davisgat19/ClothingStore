@@ -59,8 +59,6 @@ public class Main {
                         .setSize(size)
                         .setMaterial(material)
                         .setColor(color)
-                        .setFit(fit)
-                        .setLength(length)
                         .setPrice(49.99)
                         .build();
                 pants.setCustomer(customer);
@@ -83,8 +81,6 @@ public class Main {
                         .setSize(size)
                         .setMaterial(material)
                         .setColor(color)
-                        .setWaistline(waistline)
-                        .setPattern(pattern)
                         .setPrice(39.99)
                         .build();
                 skirt.setCustomer(customer);
@@ -107,8 +103,6 @@ public class Main {
                         .setSize(size)
                         .setMaterial(material)
                         .setColor(color)
-                        .setSleeves(sleeves)
-                        .setNeck(neck)
                         .setPrice(29.99)
                         .build();
                 tShirt.setCustomer(customer);

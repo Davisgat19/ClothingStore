@@ -1,12 +1,18 @@
 package business;
 
 public class Skirt extends Clothing {
-    private final String waistline;
-    private final String pattern;
+    private String waistline;
+    private String pattern;
 
-    public Skirt(String id, String name, String size, double price, String material, String color, String waistline, String pattern) {
+    public Skirt(String id, String name, String size, double price, String material, String color) {
         super(id, name, size, price, material, color);
+    }
+
+    public void setWaistline(String waistline) {
         this.waistline = waistline;
+    }
+
+    public void setPattern(String pattern) {
         this.pattern = pattern;
     }
 
